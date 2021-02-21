@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	lambda.Start(func() string {
-		return "Hello, world!"
+	lambda.Start(func() (string, error) {
+		return "Hello, world!", nil
 	})
 }
