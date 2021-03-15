@@ -20,9 +20,12 @@ jobs:
 
   build-and-push:
     docker:
-      - image: cimg/go:1.15
+      - image: cimg/base:2021.03
 
     steps:
+      - setup_remote_docker:
+          version: 20.10.2
+
       - aws-ecr/build-and-push-image:
           repo: $AWS_ECR_REPO
           tag: $CIRCLE_SHA1
