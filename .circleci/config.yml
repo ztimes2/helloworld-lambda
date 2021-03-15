@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.15.3
+  aws-cli: circleci/aws-cli@1.4.0
 
 jobs:
   test:
@@ -27,17 +28,39 @@ jobs:
           version: 20.10.2
 
       - aws-ecr/build-and-push-image:
-          repo: $AWS_ECR_REPO
-          tag: $CIRCLE_SHA1
+          repo: ${AWS_ECR_REPO}
+          tag: ${CIRCLE_SHA1}
+
+  deploy:
+    docker:
+      - image: cimg/base:2021.03
+
+    steps:
+      - checkout
+
+      - aws-cli/install
+
+      - aws-cli/setup:
+          aws-region: ${AWS_REGION}
+
+      - run:
+          name: Update Docker image of Lambda function
+          command: aws lambda update-function-code --function-name ${AWS_LAMBDA_FUNCTION} --image-uri ${AWS_ECR_ACCOUNT_URL}/${AWS_ECR_REPO}:${CIRCLE_SHA1}
 
 workflows:
   version: 2
-  test:
+  test-build-deploy:
     jobs:
       - test
       - build-and-push:
           requires:
             - test
+          filters:
+            branches:
+              only: main
+      - deploy:
+          requires:
+            - build-and-push
           filters:
             branches:
               only: main
