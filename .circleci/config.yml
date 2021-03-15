@@ -41,7 +41,7 @@ jobs:
       - aws-cli/install
 
       - aws-cli/setup:
-          aws-region: ${AWS_REGION}
+          aws-region: AWS_REGION
 
       - run:
           name: Update Docker image of Lambda function
