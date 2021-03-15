@@ -1,0 +1,16 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: circleci/golang:1.15
+
+    steps:
+      - checkout
+
+      - run:
+          name: Run go vet
+          command: go vet -mod=vendor -v ./...
+
+      - run:
+          name: Run tests
+          command: go test -mod=vendor -short -v ./...
