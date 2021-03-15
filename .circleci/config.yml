@@ -20,7 +20,7 @@ jobs:
 
   build-and-push:
     docker:
-      - image: cimg/base:2021.03
+      - image: cimg/go:1.15
 
     steps:
       - aws-ecr/build-and-push-image:
