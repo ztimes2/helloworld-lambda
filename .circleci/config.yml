@@ -1,8 +1,11 @@
 version: 2.1
+orbs:
+  aws-ecr: circleci/aws-ecr@6.15.3
+
 jobs:
   test:
     docker:
-      - image: circleci/golang:1.15
+      - image: cimg/go:1.15
 
     steps:
       - checkout
@@ -15,8 +18,22 @@ jobs:
           name: Run tests
           command: go test -mod=vendor -short -v ./...
 
+  build-and-push:
+    docker:
+      - image: cimg/base:2021.03
+
+    steps:
+      - aws-ecr/build-and-push-image:
+          tag: ${CIRCLE_SHA1}
+
 workflows:
   version: 2
   test:
     jobs:
       - test
+      - build-and-push:
+          requires:
+            - test
+          filters:
+            branches:
+              only: main
