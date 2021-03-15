@@ -14,3 +14,9 @@ jobs:
       - run:
           name: Run tests
           command: go test -mod=vendor -short -v ./...
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
