@@ -24,8 +24,8 @@ jobs:
 
     steps:
       - aws-ecr/build-and-push-image:
-          repo: ${AWS_ECR_REPO}
-          tag: ${CIRCLE_SHA1}
+          repo: $AWS_ECR_REPO
+          tag: $CIRCLE_SHA1
 
 workflows:
   version: 2
