@@ -18,7 +18,5 @@ func main() {
 			slackChannelID,
 			slack.MsgOptionText("Hello, world!", false),
 		)
-
-		return err
 	})
 }
